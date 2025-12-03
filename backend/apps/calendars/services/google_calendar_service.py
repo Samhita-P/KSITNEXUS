@@ -35,7 +35,7 @@ class GoogleCalendarService:
     # OAuth 2.0 client configuration (should be in settings)
     CLIENT_ID = getattr(settings, 'GOOGLE_CALENDAR_CLIENT_ID', None)
     CLIENT_SECRET = getattr(settings, 'GOOGLE_CALENDAR_CLIENT_SECRET', None)
-    REDIRECT_URI = getattr(settings, 'GOOGLE_CALENDAR_REDIRECT_URI', 'http://localhost:8002/api/calendars/google/callback/')
+    REDIRECT_URI = getattr(settings, 'GOOGLE_CALENDAR_REDIRECT_URI', 'https://ksitnexus.onrender.com/api/calendars/google/callback/')
     
     @staticmethod
     def get_authorization_url(user):

@@ -31,10 +31,10 @@ class ApiConfig {
     
     // Fallback for development
     if (kIsWeb) {
-      return 'http://localhost:8002/api';
+      return 'https://ksitnexus.onrender.com/api';
     } else {
       // Default fallback for mobile (should not happen if .env is configured)
-      return 'https://ksit-nexus.onrender.com/api';
+      return 'https://ksitnexus.onrender.com/api';
     }
   }
   
@@ -56,9 +56,9 @@ class ApiConfig {
     
     // Default fallback
     if (kIsWeb) {
-      return 'ws://localhost:8001/ws';
+      return 'wss://ksitnexus.onrender.com/ws';
     } else {
-      return 'wss://ksit-nexus.onrender.com/ws';
+      return 'wss://ksitnexus.onrender.com/ws';
     }
   }
   
@@ -76,9 +76,9 @@ class ApiConfig {
     
     // Fallback for development
     if (kIsWeb) {
-      return 'http://localhost:8002';
+      return 'https://ksitnexus.onrender.com';
     } else {
-      return 'https://ksit-nexus.onrender.com';
+      return 'https://ksitnexus.onrender.com';
     }
   }
 }

@@ -218,7 +218,7 @@ CORS_ALLOW_CREDENTIALS = True
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS = [f"https://{RENDER_EXTERNAL_HOSTNAME}"]
 else:
-    CSRF_TRUSTED_ORIGINS = ["http://localhost:8002"]
+    CSRF_TRUSTED_ORIGINS = ["https://ksitnexus.onrender.com"]
 
 # ---------------------------------------------------------
 # JWT

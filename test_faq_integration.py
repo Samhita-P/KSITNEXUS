@@ -6,7 +6,7 @@ import requests
 import json
 
 # Backend URL
-BASE_URL = "http://127.0.0.1:8000/api/chatbot"
+BASE_URL = "https://ksitnexus.onrender.com/api/chatbot"
 
 def test_chatbot_endpoints():
     """Test all chatbot endpoints"""
