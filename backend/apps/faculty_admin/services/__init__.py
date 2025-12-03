@@ -13,11 +13,6 @@ except Exception:
     BroadcastService = None
 
 try:
-    from .attendance_service import AttendanceService
-except Exception:
-    AttendanceService = None
-
-try:
     from .predictive_service import PredictiveService
 except Exception:
     PredictiveService = None
@@ -26,6 +21,5 @@ except Exception:
 __all__ = [
     'CaseService',
     'BroadcastService',
-    'AttendanceService',
     'PredictiveService',
 ]
