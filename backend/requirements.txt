@@ -8,7 +8,6 @@ channels-redis==4.1.0
 celery==5.3.4
 django-celery-beat==2.5.0
 django-celery-results==2.5.1
-drf-spectacular==0.26.5
 Pillow==10.1.0
 python-keycloak==5.8.1
 django-otp==1.2.0
