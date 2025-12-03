@@ -1,30 +1,34 @@
 # backend/seed_test_users.py
-# Safe seeding script for Render runs: sets required defaults and doesn't crash the deploy.
+# Safe, Render-compatible test user seeding script
+# Includes USNs for students + correct handling for faculty
 
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# Try to import Student/Faculty; fall back gracefully if models move
+# Import related models safely
 try:
     from apps.accounts.models import Student, Faculty
 except Exception:
     Student = None
     Faculty = None
 
-def create_user(username, email, password, full_name, is_student=False, is_faculty=False):
-    username_safe = username or email.split('@')[0]
-    # For simplicity make username equal to email (so authentication by email will work
-    # even if the view calls authenticate(username=...))
-    username_for_auth = email
 
-    first_name = full_name.split()[0] if full_name else ""
-    last_name = " ".join(full_name.split()[1:]) if full_name and len(full_name.split()) > 1 else ""
+# -----------------------------
+# HELPERS
+# -----------------------------
+def create_user(email, password, full_name, is_student=False, is_faculty=False, usn=None):
+    username_for_auth = email  # login using email
 
-    if User.objects.filter(username=username_for_auth).exists():
-        print(f"User already exists: {username_for_auth}")
-        return User.objects.get(username=username_for_auth)
+    first_name = full_name.split()[0]
+    last_name = " ".join(full_name.split()[1:]) if len(full_name.split()) > 1 else ""
+
+    # If user already exists → return existing user
+    existing = User.objects.filter(username=username_for_auth).first()
+    if existing:
+        print(f"User already exists: {email}")
+        return existing
 
     try:
         with transaction.atomic():
@@ -35,92 +39,85 @@ def create_user(username, email, password, full_name, is_student=False, is_facul
                 first_name=first_name,
                 last_name=last_name,
             )
-            # If your custom User model uses different fields, adapt above accordingly.
 
-            # Create Student/Faculty profile rows with safe defaults if those models exist.
+            # --- STUDENT CREATION ---
             if is_student and Student is not None:
-                # Student likely requires year_of_study (NOT NULL). Pick sensible defaults.
-                student_defaults = {}
-                # Set some common fields defensively
-                # If a field doesn't exist, ignore it
                 try:
-                    Student.objects.create(user=user, year_of_study=1)
-                except TypeError:
-                    # model signature is different; try setting only user
-                    try:
-                        Student.objects.create(user=user)
-                    except Exception as e:
-                        print(f"⚠️ Could not create Student profile for {username_for_auth}: {e}")
+                    Student.objects.create(
+                        user=user,
+                        usn=usn,
+                        year_of_study=3,      # Default safe value
+                        section="C",           # Default
+                        branch="CSE"           # Default
+                    )
+                    print(f"✔ Student created: {email} ({usn})")
                 except IntegrityError as e:
-                    print(f"⚠️ Integrity error when creating Student for {username_for_auth}: {e}")
+                    print(f"⚠️ Student creation failed for {email}: {e}")
 
+            # --- FACULTY CREATION ---
             if is_faculty and Faculty is not None:
                 try:
-                    # If Faculty model needs designation or faculty_id, we provide defaults
-                    # If extra args are invalid it will fall back to user-only creation.
-                    Faculty.objects.create(user=user)
-                except TypeError:
-                    try:
-                        Faculty.objects.create(user=user)
-                    except Exception as e:
-                        print(f"⚠️ Could not create Faculty profile for {username_for_auth}: {e}")
+                    Faculty.objects.create(
+                        user=user,
+                        designation="Assistant Professor",
+                        employee_id=f"EMP{user.id:03d}"   # Auto-generate employee ID
+                    )
+                    print(f"✔ Faculty created: {email}")
                 except IntegrityError as e:
-                    print(f"⚠️ Integrity error when creating Faculty for {username_for_auth}: {e}")
+                    print(f"⚠️ Faculty creation failed for {email}: {e}")
 
-            print(f"✔ User created: {username_for_auth}")
+            print(f"✔ User created: {email}")
             return user
 
-    except IntegrityError as e:
-        print(f"✖ Integrity error creating user {username_for_auth}: {e}")
     except Exception as e:
-        print(f"✖ Unexpected error creating user {username_for_auth}: {e}")
+        print(f"✖ Unexpected error creating user {email}: {e}")
 
-# Bulk create the sample users
+
+# -----------------------------
+# RUN SEEDING
+# -----------------------------
 def run():
     print("➡️ Seeding test users...")
 
     password = "Sam@123"
 
+    # --- Student list with USNs ---
     students = [
-        ("samhita", "samhita@gmail.com", "Samhita P"),
-        ("umesh", "umesh@gmail.com", "Umesh Bhatta"),
-        ("vignesh", "vignesh@gmail.com", "Vignesh S"),
-        ("shreya", "shreya@gmail.com", "Shreya Murthy"),
-        ("sangeetha", "sangeetha@gmail.com", "Sangeetha S"),
+        ("samhita@gmail.com",   "Samhita P",      "1KS22CS130"),
+        ("umesh@gmail.com",     "Umesh Bhatta",   "1KS22CS176"),
+        ("vignesh@gmail.com",   "Vignesh S",      "1KS22CS184"),
+        ("shreya@gmail.com",    "Shreya Murthy",  "1KS22CS146"),
+        ("sangeetha@gmail.com", "Sangeetha S",    "1KS22CS135"),
     ]
 
     faculty = [
-        ("prashanth", "prashanth@gmail.com", "Prashanth HS"),
-        ("krishna", "krishna@gmail.com", "Krishna Gudi"),
-        ("roopesh", "roopesh@gmail.com", "Roopesh Kumar"),
-        ("kumar", "kumar@gmail.com", "Kumar K"),
-        ("raghavendra", "raghavendra@gmail.com", "Raghavendrachar S"),
+        ("prashanth@gmail.com", "Prashanth HS"),
+        ("krishna@gmail.com",   "Krishna Gudi"),
+        ("roopesh@gmail.com",   "Roopesh Kumar"),
+        ("kumar@gmail.com",     "Kumar K"),
+        ("raghavendra@gmail.com", "Raghavendrachar S"),
     ]
 
-    # Create superuser if missing (safe defaults)
-    admin_username = "admin"
-    admin_email = "admin@example.com"
-    admin_password = "Admin@123"
-    if not User.objects.filter(username=admin_username).exists():
-        try:
-            User.objects.create_superuser(username=admin_username, email=admin_email, password=admin_password)
-            print("✔ Superuser created")
-        except Exception as e:
-            print(f"⚠️ Could not create superuser: {e}")
+    # Ensure admin exists
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "Admin@123")
+        print("✔ Superuser created")
     else:
         print("✔ Superuser already exists")
 
-    for uname, mail, fullname in students:
-        create_user(uname, mail, password, fullname, is_student=True)
+    # Seed students
+    for email, fullname, usn in students:
+        create_user(email, password, fullname, is_student=True, usn=usn)
 
-    for uname, mail, fullname in faculty:
-        create_user(uname, mail, password, fullname, is_faculty=True)
+    # Seed faculty
+    for email, fullname in faculty:
+        create_user(email, password, fullname, is_faculty=True)
 
-    print("🎉 USER CREATION COMPLETE!")
+    print("🎉 USER SEEDING COMPLETE!")
 
-# Allow running when file is executed by `manage.py shell < thisfile`
+
+# Auto-run when executed via: python manage.py shell < seed_test_users.py
 if __name__ == "__main__":
     run()
 else:
-    # manage.py shell will exec this file; call run()
     run()
