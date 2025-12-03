@@ -203,17 +203,17 @@ REST_FRAMEWORK = {
 # CORS / CSRF
 # ---------------------------------------------------------
 
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = [
-        "https://ksitnexus.onrender.com",
-        "https://ksit-nexus-app.firebaseapp.com",
-        "https://ksit-nexus-app.web.app",
-    ]
-
+# Allow all origins for mobile apps (APK/React Native)
+# Mobile apps don't have a fixed origin, so we need to allow all
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+# Additional allowed origins for web apps (optional, since ALLOW_ALL is True)
+CORS_ALLOWED_ORIGINS = [
+    "https://ksitnexus.onrender.com",
+    "https://ksit-nexus-app.firebaseapp.com",
+    "https://ksit-nexus-app.web.app",
+]
 
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS = [f"https://{RENDER_EXTERNAL_HOSTNAME}"]

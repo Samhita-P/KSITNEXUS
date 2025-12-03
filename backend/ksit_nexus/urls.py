@@ -6,6 +6,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from .health_views import health
 # from apps.notifications.health_views import health_check, detailed_health_check, metrics
 
 urlpatterns = [
@@ -37,8 +38,8 @@ urlpatterns = [
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
-    # Health check endpoints - temporarily disabled
-    # path('health/', health_check, name='health'),
+    # Health check endpoints
+    path('health/', health, name='health'),
     # path('health/detailed/', detailed_health_check, name='detailed-health'),
     # path('metrics/', metrics, name='metrics'),
 ]
