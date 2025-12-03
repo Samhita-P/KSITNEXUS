@@ -7,7 +7,7 @@ class ImageUrlHelper {
   /// 
   /// Handles:
   /// - Relative URLs (e.g., /media/profile_pictures/...)
-  /// - Absolute URLs (e.g., http://10.222.10.6:8000/media/...)
+  /// - Absolute URLs (e.g., https://ksitnexus.onrender.com/media/...)
   /// - Already full URLs (e.g., https://example.com/image.jpg)
   /// 
   /// Returns null if the input is null or empty

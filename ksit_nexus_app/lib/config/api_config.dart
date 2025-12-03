@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// Setup Instructions:
 /// 1. Copy .env.example to .env in the root of ksit_nexus_app/
 /// 2. Update API_BASE_URL in .env with your Render backend URL:
-///    API_BASE_URL=https://ksit-nexus.onrender.com
+///    API_BASE_URL=https://ksitnexus.onrender.com
 /// 3. For local development, you can use:
 ///    API_BASE_URL=http://192.168.x.x:8002
 /// 

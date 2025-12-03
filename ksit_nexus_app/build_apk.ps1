@@ -3,10 +3,11 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Building APK (working around path space issues)..." -ForegroundColor Green
 
-# Create temporary build directory without spaces
-$tempBuildDir = "C:\KSIT_TEMP_BUILD"
+# Create temporary build directory without spaces (with timestamp to avoid conflicts)
+$timestamp = Get-Date -Format "yyyyMMddHHmmss"
+$tempBuildDir = "C:\KSIT_TEMP_BUILD_$timestamp"
 if (Test-Path $tempBuildDir) {
-    Remove-Item $tempBuildDir -Recurse -Force
+    Remove-Item $tempBuildDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 New-Item -ItemType Directory -Path $tempBuildDir -Force | Out-Null
 

@@ -271,7 +271,7 @@ class _NoticesScreenState extends ConsumerState<NoticesScreen>
                   const SizedBox(height: 8),
                   Text(
                     isConnectionError
-                        ? 'Please make sure the backend server is running on port 8000.\n\nIn WSL terminal, run:\npython manage.py runserver 0.0.0.0:8000'
+                        ? 'Unable to connect to the server. Please check your internet connection and try again.\n\nIf you\'re testing locally, make sure the backend server is running.'
                         : error.toString(),
                     style: const TextStyle(color: AppTheme.grey600),
                     textAlign: TextAlign.center,

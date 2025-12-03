@@ -6,10 +6,10 @@
 
 2. **Add this content** to the `.env` file:
    ```env
-   API_BASE_URL=https://ksit-nexus.onrender.com
+   API_BASE_URL=https://ksitnexus.onrender.com
    ```
 
-3. **Replace** `https://ksit-nexus.onrender.com` with your actual Render URL after deployment
+3. **Replace** `https://ksitnexus.onrender.com` with your actual Render URL after deployment
 
 4. **Save the file**
 
