@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+staticfiles/
+media/
+db.sqlite3
+
+# Virtual Environments
+venv/
+env/
+test_env/
+*.env
+
+# Flutter
+build/
+.ios/
+.android/
+.pub-cache/
+.dart_tool/
+
+# VSCode
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store

@@ -1,0 +1,112 @@
+# GitLab CI/CD Pipeline
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+
+backend-tests:
+  stage: test
+  image: python:3.12
+  services:
+    - postgres:15
+    - redis:7
+  variables:
+    POSTGRES_DB: ksit_nexus_test
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ksit_nexus_test
+    REDIS_URL: redis://redis:6379/0
+  before_script:
+    - cd backend
+    - pip install -r requirements.txt
+  script:
+    - python manage.py makemigrations
+    - python manage.py migrate
+    - pytest --cov=apps --cov-report=xml
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage.xml
+
+frontend-tests:
+  stage: test
+  image: subosito/flutter:3.7.2
+  script:
+    - cd ksit_nexus_app
+    - flutter pub get
+    - flutter analyze
+    - flutter test
+    - flutter build web --release
+    - flutter build apk --release
+
+backend-lint:
+  stage: test
+  image: python:3.12
+  script:
+    - cd backend
+    - pip install flake8 black isort
+    - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    - black --check .
+    - isort --check-only .
+
+security-scan:
+  stage: test
+  image: python:3.12
+  script:
+    - cd backend
+    - pip install bandit safety
+    - bandit -r . -f json -o bandit-report.json
+    - safety check --json
+
+build-backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd backend
+    - docker build -f Dockerfile.production -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHA
+
+build-frontend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd ksit_nexus_app
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHA
+
+deploy-staging:
+  stage: deploy
+  image: docker:latest
+  environment:
+    name: staging
+    url: https://staging.ksitnexus.com
+  script:
+    - echo "Deploy to staging"
+    # Add deployment commands here
+  only:
+    - main
+
+deploy-production:
+  stage: deploy
+  image: docker:latest
+  environment:
+    name: production
+    url: https://ksitnexus.com
+  script:
+    - echo "Deploy to production"
+    # Add deployment commands here
+  only:
+    - main
+  when: manual
+

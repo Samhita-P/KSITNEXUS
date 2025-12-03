@@ -1,0 +1,20 @@
+KSIT NEXUS - BLOCK DIAGRAM
+═══════════════════════════════════════════════════════════════
+
+Flutter Client → JWT+2FA Auth → Django REST API → 18 Modules
+                                                              ↓
+┌──────────┬──────────┬──────────┬──────────┐
+│ Accounts │ Notices  │ Notify   │ Academic │
+├──────────┼──────────┼──────────┼──────────┤
+│ Chatbot  │ Study    │ Complaints│Feedback │
+├──────────┼──────────┼──────────┼──────────┤
+│Marketplace│Calendar│ Faculty  │Reservations│
+├──────────┼──────────┼──────────┼──────────┤
+│ Safety   │Gamify   │Recommend │ Meetings │
+└──────────┴──────────┴──────────┴──────────┘
+                              ↓
+PostgreSQL/Redis ← Celery → Firebase FCM → Docker/Nginx
+
+═══════════════════════════════════════════════════════════════
+
+

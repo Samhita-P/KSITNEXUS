@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSIT Nexus - System Architecture Diagram (A3)</title>
+    <style>
+        @page {
+            size: A3 landscape;
+            margin: 10mm;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+            width: 1150mm; /* A3 landscape width in mm */
+            max-width: 100%;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .layer {
+            border: 3px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .layer-header {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+        }
+        
+        .module {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px 0;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .client-layer { border-color: #4A90E2; background: #E3F2FD; }
+        .auth-layer { border-color: #50C878; background: #E8F5E9; }
+        .api-layer { border-color: #FF6B6B; background: #FFEBEE; }
+        .data-layer { border-color: #FFA500; background: #FFF3E0; }
+        
+        .arrow {
+            text-align: center;
+            font-size: 24px;
+            color: #34495e;
+            margin: 10px 0;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .flow-box {
+            background: white;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        @media print {
+            body {
+                width: 100%;
+            }
+            .container {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">KSIT NEXUS - SYSTEM ARCHITECTURE DIAGRAM</div>
+    
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number">37+</div>
+            <div class="stat-label">Responsive Screens</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">18</div>
+            <div class="stat-label">Backend Apps</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">API Endpoints</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">19</div>
+            <div class="stat-label">Feature Modules</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">3</div>
+            <div class="stat-label">User Roles</div>
+        </div>
+    </div>
+    
+    <div class="flow-diagram">
+        <div class="flow-box" style="background: #E3F2FD;">
+            <strong>CLIENT LAYER</strong><br>
+            Flutter App (Android/iOS/Web)<br>
+            37+ Responsive Screens<br>
+            Riverpod + GoRouter
+        </div>
+        <div class="arrow">▼</div>
+        <div class="flow-box" style="background: #E8F5E9;">
+            <strong>AUTHENTICATION</strong><br>
+            JWT + 2FA (TOTP)<br>
+            Role-Based Access Control<br>
+            OTP Service
+        </div>
+        <div class="arrow">▼</div>
+        <div class="flow-box" style="background: #FFEBEE;">
+            <strong>API GATEWAY</strong><br>
+            Django REST Framework<br>
+            100+ REST Endpoints<br>
+            WebSocket Support
+        </div>
+        <div class="arrow">▼</div>
+    </div>
+    
+    <div class="container">
+        <div class="layer client-layer">
+            <div class="layer-header">CORE MODULES</div>
+            <div class="module">Accounts & Users</div>
+            <div class="module">Notices & Announcements</div>
+            <div class="module">Notifications (FCM)</div>
+            <div class="module">Academic Planner</div>
+            <div class="module">AI Chatbot</div>
+        </div>
+        
+        <div class="layer auth-layer">
+            <div class="layer-header">COMMUNITY MODULES</div>
+            <div class="module">Study Groups</div>
+            <div class="module">Complaints Management</div>
+            <div class="module">Feedback System</div>
+            <div class="module">Marketplace</div>
+            <div class="module">Calendar & Events</div>
+        </div>
+        
+        <div class="layer api-layer">
+            <div class="layer-header">ADMIN MODULES</div>
+            <div class="module">Faculty Admin Tools</div>
+            <div class="module">Reservations System</div>
+            <div class="module">Safety & Wellbeing</div>
+            <div class="module">Gamification</div>
+            <div class="module">Recommendations</div>
+        </div>
+        
+        <div class="layer data-layer">
+            <div class="layer-header">SUPPORT MODULES</div>
+            <div class="module">Meetings Management</div>
+            <div class="module">Awards & Recognition</div>
+            <div class="module">Lifecycle Management</div>
+            <div class="module">Local Integrations</div>
+        </div>
+    </div>
+    
+    <div class="arrow">▼</div>
+    
+    <div class="container">
+        <div class="layer">
+            <div class="layer-header">DATA LAYER</div>
+            <div class="module">PostgreSQL (Production)</div>
+            <div class="module">SQLite (Development)</div>
+            <div class="module">Redis Cache</div>
+            <div class="module">File Storage</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">BACKGROUND PROCESSING</div>
+            <div class="module">Celery Workers</div>
+            <div class="module">Async Task Queue</div>
+            <div class="module">Scheduled Tasks</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">EXTERNAL SERVICES</div>
+            <div class="module">Firebase FCM</div>
+            <div class="module">Google Calendar API</div>
+            <div class="module">Email/SMS Services</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">INFRASTRUCTURE</div>
+            <div class="module">Docker Containers</div>
+            <div class="module">Nginx + Gunicorn</div>
+            <div class="module">Prometheus + Grafana</div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+        <h3 style="text-align: center; color: #2c3e50;">TECHNOLOGY STACK</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;">
+            <div>
+                <strong>Frontend:</strong><br>
+                Flutter 3.7.2+ | Riverpod | GoRouter | Material Design
+            </div>
+            <div>
+                <strong>Backend:</strong><br>
+                Django 4.2.7 | DRF 3.14.0 | Celery | Redis
+            </div>
+            <div>
+                <strong>Infrastructure:</strong><br>
+                Docker | Nginx | Gunicorn | Prometheus | Grafana
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px; text-align: center; color: #7f8c8d; font-size: 12px;">
+        KSIT Nexus - Digital Campus Management Platform | Designed for A3 Landscape (420mm x 297mm)
+    </div>
+</body>
+</html>
+
+

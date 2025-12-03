@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSIT Nexus - Compact Architecture (A6)</title>
+    <style>
+        @page {
+            size: A6 landscape;
+            margin: 5mm;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 5px;
+            background: white;
+            width: 210mm; /* A6 landscape width */
+            max-width: 100%;
+            font-size: 9px;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+            padding: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            margin: 5px 0;
+        }
+        
+        .stat-box {
+            background: #34495e;
+            color: white;
+            padding: 4px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 7px;
+            margin-top: 2px;
+        }
+        
+        .flow-box {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            padding: 5px;
+            margin: 3px 0;
+            text-align: center;
+            font-size: 8px;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 12px;
+            color: #34495e;
+            margin: 2px 0;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px;
+            margin: 5px 0;
+        }
+        
+        .layer {
+            border: 2px solid #333;
+            border-radius: 4px;
+            padding: 5px;
+            background: #f9f9f9;
+        }
+        
+        .layer-header {
+            font-weight: bold;
+            font-size: 9px;
+            color: #2c3e50;
+            margin-bottom: 3px;
+            text-align: center;
+            padding: 3px;
+            background: #ecf0f1;
+            border-radius: 3px;
+        }
+        
+        .module {
+            background: white;
+            border: 1px solid #3498db;
+            border-radius: 3px;
+            padding: 3px;
+            margin: 2px 0;
+            font-size: 7px;
+            text-align: center;
+        }
+        
+        .tech-stack {
+            margin-top: 5px;
+            padding: 5px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-size: 7px;
+        }
+        
+        .tech-stack h3 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 9px;
+            margin: 0 0 3px 0;
+        }
+        
+        .tech-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+        
+        .footer {
+            margin-top: 5px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 6px;
+        }
+        
+        @media print {
+            body {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">KSIT NEXUS - SYSTEM ARCHITECTURE</div>
+    
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number">37+</div>
+            <div class="stat-label">Screens</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">18</div>
+            <div class="stat-label">Apps</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">APIs</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">19</div>
+            <div class="stat-label">Modules</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Roles</div>
+        </div>
+    </div>
+    
+    <div class="flow-box" style="background: #E3F2FD;">
+        <strong>CLIENT</strong><br>Flutter (Android/iOS/Web)
+    </div>
+    <div class="arrow">▼</div>
+    <div class="flow-box" style="background: #E8F5E9;">
+        <strong>AUTH</strong><br>JWT + 2FA + RBAC
+    </div>
+    <div class="arrow">▼</div>
+    <div class="flow-box" style="background: #FFEBEE;">
+        <strong>API</strong><br>Django REST (100+ Endpoints)
+    </div>
+    <div class="arrow">▼</div>
+    
+    <div class="container">
+        <div class="layer">
+            <div class="layer-header">CORE</div>
+            <div class="module">Accounts</div>
+            <div class="module">Notices</div>
+            <div class="module">Notifications</div>
+            <div class="module">Academic Planner</div>
+            <div class="module">Chatbot</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">COMMUNITY</div>
+            <div class="module">Study Groups</div>
+            <div class="module">Complaints</div>
+            <div class="module">Feedback</div>
+            <div class="module">Marketplace</div>
+            <div class="module">Calendar</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">ADMIN</div>
+            <div class="module">Faculty Tools</div>
+            <div class="module">Reservations</div>
+            <div class="module">Safety</div>
+            <div class="module">Gamification</div>
+            <div class="module">Recommendations</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">SUPPORT</div>
+            <div class="module">Meetings</div>
+            <div class="module">Awards</div>
+            <div class="module">Lifecycle</div>
+            <div class="module">Integrations</div>
+        </div>
+    </div>
+    
+    <div class="arrow">▼</div>
+    
+    <div class="container">
+        <div class="layer">
+            <div class="layer-header">DATA</div>
+            <div class="module">PostgreSQL/SQLite</div>
+            <div class="module">Redis Cache</div>
+            <div class="module">File Storage</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">PROCESSING</div>
+            <div class="module">Celery Workers</div>
+            <div class="module">Async Tasks</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">EXTERNAL</div>
+            <div class="module">Firebase FCM</div>
+            <div class="module">Google Calendar</div>
+            <div class="module">Email/SMS</div>
+        </div>
+        
+        <div class="layer">
+            <div class="layer-header">INFRA</div>
+            <div class="module">Docker</div>
+            <div class="module">Nginx/Gunicorn</div>
+            <div class="module">Prometheus/Grafana</div>
+        </div>
+    </div>
+    
+    <div class="tech-stack">
+        <h3>TECH STACK</h3>
+        <div class="tech-row">
+            <div><strong>Frontend:</strong> Flutter | Riverpod | GoRouter</div>
+            <div><strong>Backend:</strong> Django | DRF | Celery | Redis</div>
+        </div>
+    </div>
+    
+    <div class="footer">KSIT Nexus - A6 Landscape (210mm x 148.5mm)</div>
+</body>
+</html>
+
+

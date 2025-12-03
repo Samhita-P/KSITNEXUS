@@ -1,0 +1,207 @@
+KSIT NEXUS - SYSTEM ARCHITECTURE FLOWCHART
+==========================================
+Designed for A3 Sheet (420mm x 297mm Landscape)
+==========================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           CLIENT LAYER                                      │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  Flutter Cross-Platform Application                                  │  │
+│  │  • Android / iOS / Web                                               │  │
+│  │  • 37+ Responsive Screens                                            │  │
+│  │  • Riverpod State Management                                         │  │
+│  │  • GoRouter Navigation                                                │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      AUTHENTICATION & SECURITY                              │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ JWT Auth     │  │ 2FA (TOTP)   │  │ OTP Service  │  │ RBAC         │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          API GATEWAY LAYER                                  │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  Django REST Framework                                               │  │
+│  │  • 100+ REST Endpoints                                               │  │
+│  │  • WebSocket Support (Django Channels)                               │  │
+│  │  • OpenAPI/Swagger Documentation                                     │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+        ┌───────────────────────────┼───────────────────────────┐
+        │                           │                           │
+        ▼                           ▼                           ▼
+┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐
+│  CORE MODULES     │  │ COMMUNITY MODULES │  │ ADMIN MODULES     │
+├───────────────────┤  ├───────────────────┤  ├───────────────────┤
+│ • Accounts        │  │ • Study Groups    │  │ • Faculty Tools   │
+│ • Notices         │  │ • Complaints      │  │ • Reservations    │
+│ • Notifications   │  │ • Feedback        │  │ • Safety          │
+│ • Academic Planner│  │ • Marketplace     │  │ • Gamification    │
+│ • AI Chatbot      │  │ • Calendar        │  │ • Recommendations │
+└───────────────────┘  └───────────────────┘  └───────────────────┘
+        │                           │                           │
+        └───────────────────────────┼───────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            DATA LAYER                                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ PostgreSQL   │  │ SQLite       │  │ Redis Cache   │  │ File Storage │   │
+│  │ (Production) │  │ (Development)│  │ (Sessions)    │  │ (Media)      │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      BACKGROUND PROCESSING                                   │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  Celery Workers                                                       │  │
+│  │  • Async Task Queue                                                  │  │
+│  │  • Scheduled Tasks (Celery Beat)                                     │  │
+│  │  • Email/SMS Sending                                                 │  │
+│  │  • Notification Processing                                           │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        EXTERNAL SERVICES                                     │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Firebase FCM │  │ Google       │  │ Email        │  │ SMS Service  │   │
+│  │ (Push Notif) │  │ Calendar API │  │ Service      │  │ (OTP)        │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    INFRASTRUCTURE & MONITORING                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Docker       │  │ Nginx        │  │ Prometheus   │  │ Grafana      │   │
+│  │ Containers   │  │ (Reverse     │  │ (Metrics)    │  │ (Dashboards) │   │
+│  │              │  │  Proxy)      │  │              │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  Gunicorn (WSGI Server)                                               │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+USER TYPES & ACCESS FLOW
+=========================
+
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│ Students │     │ Faculty  │     │  Admin   │
+└────┬──────┘     └────┬─────┘     └────┬─────┘
+     │                 │                 │
+     └─────────────────┼─────────────────┘
+                       │
+                       ▼
+            ┌──────────────────┐
+            │  Flutter App     │
+            │  (37+ Screens)   │
+            └────────┬─────────┘
+                     │
+                     ▼
+            ┌──────────────────┐
+            │  Authentication  │
+            │  JWT + 2FA       │
+            └────────┬─────────┘
+                     │
+        ┌────────────┼────────────┐
+        │            │            │
+        ▼            ▼            ▼
+  ┌─────────┐  ┌─────────┐  ┌─────────┐
+  │ Student │  │ Faculty │  │  Admin  │
+  │ Features│  │ Features│  │ Features│
+  └─────────┘  └─────────┘  └─────────┘
+
+DATA FLOW DIAGRAM
+=================
+
+User Request
+     │
+     ▼
+Authentication Check
+     │
+     ├─── Valid ────► API Gateway
+     │                    │
+     └─── Invalid ────► Error Response
+                          │
+                          ▼
+                    Check Cache (Redis)
+                          │
+                    ┌─────┴─────┐
+                    │           │
+              Cache Hit    Cache Miss
+                    │           │
+                    │           ▼
+                    │      Backend Module
+                    │           │
+                    │           ▼
+                    │      Database Query
+                    │           │
+                    │           ▼
+                    │      Update Cache
+                    │           │
+                    └───────┬───┘
+                            │
+                            ▼
+                      API Response
+                            │
+                            ▼
+                      Client Update
+                            │
+                            ├───► WebSocket (Real-time)
+                            │
+                            └───► Push Notification (FCM)
+
+MODULE BREAKDOWN (18 Backend Applications)
+==========================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. accounts          - User management, authentication                    │
+│ 2. notices           - Announcements and notices                          │
+│ 3. notifications     - Push notifications, FCM integration              │
+│ 4. academic_planner  - Courses, assignments, grades                      │
+│ 5. chatbot           - AI-powered FAQ and support                        │
+│ 6. study_groups      - Collaborative study groups                        │
+│ 7. complaints        - Complaint submission and tracking                 │
+│ 8. feedback          - Feedback collection and analytics                 │
+│ 9. calendars         - Event management, Google Calendar integration     │
+│ 10. marketplace      - Buy/sell items, book exchange                    │
+│ 11. reservations     - Room, seat, resource booking                     │
+│ 12. safety_wellbeing - Emergency alerts, counseling services            │
+│ 13. gamification     - Points, achievements, leaderboards               │
+│ 14. faculty_admin    - Faculty tools, attendance, analytics              │
+│ 15. recommendations  - Personalized content recommendations             │
+│ 16. meetings         - Student-faculty meeting scheduling               │
+│ 17. awards           - Awards and recognition system                     │
+│ 18. lifecycle        - Student lifecycle tracking                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+TECHNOLOGY STACK SUMMARY
+=========================
+
+Frontend:  Flutter 3.7.2+ | Riverpod | GoRouter | Material Design
+Backend:   Django 4.2.7 | DRF 3.14.0 | Celery | Redis
+Database:  PostgreSQL (Prod) | SQLite (Dev)
+Security:  JWT | 2FA (TOTP) | RBAC
+Infra:     Docker | Nginx | Gunicorn | Prometheus | Grafana
+External:  Firebase FCM | Google Calendar API | Email/SMS
+
+STATISTICS
+==========
+
+• 37+ Responsive Screens (100% responsive)
+• 18 Django Backend Applications
+• 100+ REST API Endpoints
+• 3 User Roles (Student, Faculty, Admin)
+• 19 Major Feature Modules
+• Cross-platform: Android, iOS, Web
+
+

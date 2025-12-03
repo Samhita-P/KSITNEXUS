@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KSIT Nexus - Form Block Diagram</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            margin: 0;
+            padding: 1px;
+            font-family: 'Arial', sans-serif;
+            font-size: 4px;
+            background: white;
+        }
+        
+        .diagram {
+            width: 100%;
+            height: auto;
+            border: 1px solid #666;
+            padding: 1px;
+            box-sizing: border-box;
+        }
+        
+        .main-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0;
+            gap: 1px;
+        }
+        
+        .component {
+            background: #E3F2FD;
+            border: 1px solid #1976D2;
+            border-radius: 1px;
+            padding: 1px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 3.5px;
+            flex: 1;
+            line-height: 1;
+            min-width: 0;
+        }
+        
+        .arrow-symbol {
+            font-size: 5px;
+            color: #333;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        
+        .modules-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5px;
+            margin: 0.5px 0;
+        }
+        
+        .module {
+            background: #F5F5F5;
+            border: 1px solid #757575;
+            border-radius: 1px;
+            padding: 0.5px;
+            text-align: center;
+            font-size: 3px;
+            line-height: 1;
+            min-height: 8px;
+        }
+        
+        .data-layer {
+            background: #FFF3E0;
+            border-color: #F57C00;
+        }
+        
+        .infra-layer {
+            background: #E8F5E9;
+            border-color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram">
+        <!-- Main Flow -->
+        <div class="main-flow">
+            <div class="component">Flutter<br/>Client</div>
+            <span class="arrow-symbol">→</span>
+            <div class="component">Auth<br/>(JWT+2FA)</div>
+            <span class="arrow-symbol">→</span>
+            <div class="component">Django<br/>REST API</div>
+            <span class="arrow-symbol">→</span>
+            <div class="component">18<br/>Modules</div>
+        </div>
+        
+        <!-- Modules Grid -->
+        <div class="modules-container">
+            <div class="module">Accounts</div>
+            <div class="module">Notices</div>
+            <div class="module">Notifications</div>
+            <div class="module">Academic</div>
+            <div class="module">Chatbot</div>
+            <div class="module">Study Groups</div>
+            <div class="module">Complaints</div>
+            <div class="module">Feedback</div>
+            <div class="module">Marketplace</div>
+            <div class="module">Calendar</div>
+            <div class="module">Faculty Tools</div>
+            <div class="module">Reservations</div>
+            <div class="module">Safety</div>
+            <div class="module">Gamification</div>
+            <div class="module">Recommendations</div>
+            <div class="module">Meetings</div>
+        </div>
+        
+        <!-- Data & Infrastructure -->
+        <div class="main-flow" style="margin-top: 1px;">
+            <div class="component data-layer">PostgreSQL<br/>Redis</div>
+            <span class="arrow-symbol">←</span>
+            <div class="component">Celery</div>
+            <span class="arrow-symbol">→</span>
+            <div class="component">Firebase<br/>FCM</div>
+            <span class="arrow-symbol">→</span>
+            <div class="component infra-layer">Docker<br/>Nginx</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Production: Use HTTPS by default, allow cleartext only for specific domains -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Allow HTTPS for Render and production domains -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">ksit-nexus.onrender.com</domain>
+        <domain includeSubdomains="true">onrender.com</domain>
+    </domain-config>
+    
+    <!-- Allow cleartext (HTTP) traffic for local development only -->
+    <!-- This is needed for connecting to local development server -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- College LAN IP range (10.x.x.x) - for local development -->
+        <domain includeSubdomains="true">10.0.0.0</domain>
+        <domain includeSubdomains="true">10.222.10.6</domain>
+        <!-- Common local network ranges - for local development -->
+        <domain includeSubdomains="true">192.168.0.0</domain>
+        <domain includeSubdomains="true">192.168.1.0</domain>
+        <domain includeSubdomains="true">100.87.200.4</domain>
+    </domain-config>
+</network-security-config>
+

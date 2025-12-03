@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSIT Nexus - Mini Block Diagram</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 8px;
+            background: white;
+            font-size: 8px;
+            line-height: 1.2;
+        }
+        
+        .diagram-container {
+            width: fit-content;
+            min-width: 242px;
+            height: auto;
+            border: 1px solid #ccc;
+            padding: 5px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+        
+        .flow-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 3px 0;
+            gap: 4px;
+            flex-wrap: nowrap;
+            width: 100%;
+        }
+        
+        .box {
+            background: #E3F2FD;
+            border: 1.5px solid #2196F3;
+            border-radius: 3px;
+            padding: 2px 4px;
+            text-align: center;
+            font-size: 7px;
+            font-weight: bold;
+            width: 55px;
+            min-width: 55px;
+            max-width: 55px;
+            white-space: normal;
+            word-wrap: break-word;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+        
+        .arrow {
+            font-size: 10px;
+            color: #333;
+            margin: 0;
+            flex-shrink: 0;
+            width: auto;
+        }
+        
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 55px);
+            gap: 4px;
+            margin: 5px auto;
+            justify-content: center;
+            width: fit-content;
+            box-sizing: border-box;
+        }
+        
+        .module-box {
+            background: #F5F5F5;
+            border: 1px solid #999;
+            border-radius: 2px;
+            padding: 2px 4px;
+            text-align: center;
+            font-size: 6px;
+            width: 55px;
+            min-width: 55px;
+            max-width: 55px;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        
+        .data-box {
+            background: #FFF3E0;
+            border: 1.5px solid #FF9800;
+        }
+        
+        .infra-box {
+            background: #E8F5E9;
+            border: 1.5px solid #4CAF50;
+        }
+        
+        .title-box {
+            background: #667eea;
+            color: white;
+            font-size: 8px;
+            padding: 3px;
+            text-align: center;
+            border-radius: 3px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="title-box">KSIT NEXUS - SYSTEM ARCHITECTURE</div>
+        
+        <div class="flow-row">
+            <div class="box">Flutter<br/>Client</div>
+            <div class="arrow">→</div>
+            <div class="box">JWT+2FA<br/>Auth</div>
+            <div class="arrow">→</div>
+            <div class="box">Django<br/>REST API</div>
+            <div class="arrow">→</div>
+            <div class="box">18 Modules</div>
+        </div>
+        
+        <div class="modules-grid">
+            <div class="module-box">Accounts</div>
+            <div class="module-box">Notices</div>
+            <div class="module-box">Notifications</div>
+            <div class="module-box">Academic</div>
+            <div class="module-box">Chatbot</div>
+            <div class="module-box">Study Groups</div>
+            <div class="module-box">Complaints</div>
+            <div class="module-box">Feedback</div>
+            <div class="module-box">Marketplace</div>
+            <div class="module-box">Calendar</div>
+            <div class="module-box">Faculty Tools</div>
+            <div class="module-box">Reservations</div>
+            <div class="module-box">Safety</div>
+            <div class="module-box">Gamification</div>
+            <div class="module-box">Recommendations</div>
+            <div class="module-box">Meetings</div>
+        </div>
+        
+        <div class="flow-row" style="margin-top: 4px;">
+            <div class="box data-box">PostgreSQL<br/>Redis</div>
+            <div class="arrow">←</div>
+            <div class="box">Celery<br/>Tasks</div>
+            <div class="arrow">→</div>
+            <div class="box">Firebase<br/>FCM</div>
+            <div class="arrow">→</div>
+            <div class="box infra-box">Docker<br/>Nginx</div>
+        </div>
+    </div>
+</body>
+</html>
+
