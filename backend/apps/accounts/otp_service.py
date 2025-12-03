@@ -1,6 +1,7 @@
 """
 OTP service for KSIT Nexus - Terminal only for development
 """
+import os
 import random
 import string
 import sys
@@ -16,13 +17,23 @@ class OTPService:
     
     @staticmethod
     def generate_otp(length=6):
-        """Generate a random OTP"""
+        """
+        Generate OTP:
+        - In Render production → always returns "123456"
+        - In local development → random 6-digit OTP
+        """
+        # Detect production on Render
+        if os.environ.get("RENDER") == "true" and not settings.DEBUG:
+            return "123456"
+        
+        # Local development fallback
         return ''.join(random.choices(string.digits, k=length))
     
     @staticmethod
     def send_otp(phone_number, user=None, purpose='registration'):
         """
         Send OTP to phone number (prints to terminal in development)
+        For testing mode in Render production, this is a no-op placeholder
         """
         # Validate phone number
         if not phone_number:
@@ -33,6 +44,15 @@ class OTPService:
             sys.stdout.flush()
             raise ValueError(error_msg)
         
+        # Generate OTP FIRST - before any database operations
+        otp_code = OTPService.generate_otp()
+        expires_at = timezone.now() + timezone.timedelta(minutes=10)
+        
+        # For testing mode, do nothing in production (no SMS/Email sending)
+        # Just print for debugging
+        print(f"OTP for debugging: {otp_code}")
+        sys.stdout.flush()
+        
         print(f"\n{'='*60}")
         print(f"OTPService.send_otp CALLED")
         print(f"Phone Number: {phone_number}")
@@ -40,10 +60,6 @@ class OTPService:
         print(f"Purpose: {purpose}")
         print(f"{'='*60}")
         sys.stdout.flush()
-        
-        # Generate OTP FIRST - before any database operations
-        otp_code = OTPService.generate_otp()
-        expires_at = timezone.now() + timezone.timedelta(minutes=10)
         
         # PRINT OTP IMMEDIATELY - before any database operations that might fail
         purpose_text = purpose.replace('_', ' ').title()

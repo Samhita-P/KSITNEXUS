@@ -161,7 +161,7 @@ class MFAService:
                 return False, "Too many attempts. Please try again later."
             
             # Verify OTP
-            is_valid = OTPService.verify_otp(user, mfa_method.phone_number, code)
+            is_valid, message = OTPService.verify_otp(mfa_method.phone_number, code, user)
             
             # Log attempt
             MFAService._log_attempt(user, 'sms', is_valid, request)
@@ -190,7 +190,7 @@ class MFAService:
                 return False, "SMS code already sent. Please wait before requesting a new one."
             
             # Send OTP
-            otp_code = OTPService.send_otp(user, mfa_method.phone_number, 'login')
+            otp_code = OTPService.send_otp(mfa_method.phone_number, user, 'login')
             
             # Cache to prevent spam
             cache.set(cache_key, True, 60)  # 1 minute
@@ -214,7 +214,7 @@ class MFAService:
             
             # Verify OTP
             email = mfa_method.email or user.email
-            is_valid = OTPService.verify_otp(user, email, code)
+            is_valid, message = OTPService.verify_otp(email, code, user)
             
             # Log attempt
             MFAService._log_attempt(user, 'email', is_valid, request)
@@ -244,7 +244,7 @@ class MFAService:
             
             # Send OTP
             email = mfa_method.email or user.email
-            otp_code = OTPService.send_otp(user, email, 'login')
+            otp_code = OTPService.send_otp(email, user, 'login')
             
             # Cache to prevent spam
             cache.set(cache_key, True, 60)  # 1 minute

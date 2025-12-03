@@ -15,71 +15,78 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// The app will automatically use the URL from .env file.
 class ApiConfig {
   // Get the base URL from environment variables
-  // Falls back to localhost for web, or a default for mobile if not set
+  // Falls back to production URL if .env is not loaded or variable is missing
   static String get baseUrl {
-    final envUrl = dotenv.env['API_BASE_URL'];
-    
-    if (envUrl != null && envUrl.isNotEmpty) {
-      // Use environment variable if set
-      // Ensure it ends with /api, add if missing
-      if (envUrl.endsWith('/api')) {
-        return envUrl;
-      } else {
-        return '$envUrl/api';
+    try {
+      final envUrl = dotenv.env['API_BASE_URL'];
+      
+      if (envUrl != null && envUrl.isNotEmpty) {
+        // Use environment variable if set
+        // Ensure it ends with /api, add if missing
+        if (envUrl.endsWith('/api')) {
+          return envUrl;
+        } else {
+          return '$envUrl/api';
+        }
       }
+    } catch (e) {
+      // dotenv not loaded or error accessing it - use fallback
+      print('⚠️ Warning: Could not read API_BASE_URL from .env: $e');
     }
     
-    // Fallback for development
-    if (kIsWeb) {
-      return 'https://ksitnexus.onrender.com/api';
-    } else {
-      // Default fallback for mobile (should not happen if .env is configured)
-      return 'https://ksitnexus.onrender.com/api';
-    }
+    // Safe fallback to production URL
+    return 'https://ksitnexus.onrender.com/api';
   }
   
   // Get WebSocket URL
   static String get websocketUrl {
-    final wsUrl = dotenv.env['WEBSOCKET_URL'];
-    
-    if (wsUrl != null && wsUrl.isNotEmpty) {
-      return wsUrl;
+    try {
+      final wsUrl = dotenv.env['WEBSOCKET_URL'];
+      
+      if (wsUrl != null && wsUrl.isNotEmpty) {
+        return wsUrl;
+      }
+    } catch (e) {
+      // dotenv not loaded or error accessing it - use fallback
+      print('⚠️ Warning: Could not read WEBSOCKET_URL from .env: $e');
     }
     
     // Fallback: derive from base URL
-    final base = baseUrl.replaceAll('/api', '');
-    if (base.startsWith('https://')) {
-      return base.replaceFirst('https://', 'wss://') + '/ws';
-    } else if (base.startsWith('http://')) {
-      return base.replaceFirst('http://', 'ws://') + '/ws';
+    try {
+      final base = baseUrl.replaceAll('/api', '');
+      if (base.startsWith('https://')) {
+        return base.replaceFirst('https://', 'wss://') + '/ws';
+      } else if (base.startsWith('http://')) {
+        return base.replaceFirst('http://', 'ws://') + '/ws';
+      }
+    } catch (e) {
+      // Error deriving from baseUrl - use direct fallback
+      print('⚠️ Warning: Could not derive WebSocket URL: $e');
     }
     
-    // Default fallback
-    if (kIsWeb) {
-      return 'wss://ksitnexus.onrender.com/ws';
-    } else {
-      return 'wss://ksitnexus.onrender.com/ws';
-    }
+    // Safe fallback to production WebSocket URL
+    return 'wss://ksitnexus.onrender.com/ws';
   }
   
   // Get media/base URL for images and files
   static String get mediaBaseUrl {
-    final envUrl = dotenv.env['API_BASE_URL'];
-    
-    if (envUrl != null && envUrl.isNotEmpty) {
-      // Remove /api suffix if present
-      if (envUrl.endsWith('/api')) {
-        return envUrl.substring(0, envUrl.length - 4);
+    try {
+      final envUrl = dotenv.env['API_BASE_URL'];
+      
+      if (envUrl != null && envUrl.isNotEmpty) {
+        // Remove /api suffix if present
+        if (envUrl.endsWith('/api')) {
+          return envUrl.substring(0, envUrl.length - 4);
+        }
+        return envUrl;
       }
-      return envUrl;
+    } catch (e) {
+      // dotenv not loaded or error accessing it - use fallback
+      print('⚠️ Warning: Could not read API_BASE_URL from .env for media URL: $e');
     }
     
-    // Fallback for development
-    if (kIsWeb) {
-      return 'https://ksitnexus.onrender.com';
-    } else {
-      return 'https://ksitnexus.onrender.com';
-    }
+    // Safe fallback to production URL
+    return 'https://ksitnexus.onrender.com';
   }
 }
 

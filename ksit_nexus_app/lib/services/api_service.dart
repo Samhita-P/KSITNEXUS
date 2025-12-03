@@ -47,8 +47,13 @@ class ApiService {
 
   ApiService() {
     _storage = const FlutterSecureStorage();
+    
+    // Get baseUrl from ApiConfig (ensures it's always current)
+    final currentBaseUrl = ApiConfig.baseUrl;
+    print('🔧 ApiService initialized with baseUrl: $currentBaseUrl');
+    
     _dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: currentBaseUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
@@ -116,8 +121,15 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          print('Making request to: ${options.uri}');
+          print('=== API REQUEST ===');
+          print('Full URL: ${options.uri}');
+          print('Base URL: ${options.baseUrl}');
+          print('Path: ${options.path}');
+          print('Method: ${options.method}');
+          print('Headers: ${options.headers}');
+          print('Data: ${options.data}');
           print('Current access token: ${_accessToken != null ? 'present' : 'null'}');
+          print('==================');
           
           // Add JWT token to Authorization header if available
           if (_accessToken != null) {
@@ -304,30 +316,70 @@ class ApiService {
 
   // Authentication APIs
   Future<AuthResponse> login(LoginRequest request) async {
-    print('Sending login request to: ${baseUrl}/auth/login/');
-    print('Request data: ${request.toJson()}');
+    // Get current baseUrl to ensure it's correct
+    final currentBaseUrl = ApiConfig.baseUrl;
+    final loginUrl = '$currentBaseUrl/auth/login/';
+    
+    print('=== LOGIN REQUEST DEBUG ===');
+    print('ApiConfig.baseUrl: $currentBaseUrl');
+    print('Full login URL: $loginUrl');
+    print('Dio baseUrl: ${_dio.options.baseUrl}');
+    print('Request body: ${request.toJson()}');
+    print('===========================');
+    
     try {
       // Get device information
       final deviceInfo = await _getDeviceInfo();
       
-      final response = await _dio.post('/auth/login/', data: {
+      // Prepare request data
+      final requestData = {
         'username': request.username,
         'password': request.password,
         'device_id': deviceInfo['device_id'],
         'device_name': deviceInfo['device_name'],
         'device_type': deviceInfo['device_type'],
-      });
-      print('Login response status: ${response.statusCode}');
-      print('Login response data: ${response.data}');
+      };
+      
+      print('=== REQUEST DETAILS ===');
+      print('URL: $loginUrl');
+      print('Method: POST');
+      print('Headers: ${_dio.options.headers}');
+      print('Body: $requestData');
+      print('======================');
+      
+      // Ensure Dio baseUrl is set correctly
+      if (_dio.options.baseUrl != currentBaseUrl) {
+        print('⚠️ Warning: Dio baseUrl mismatch. Updating...');
+        _dio.options.baseUrl = currentBaseUrl;
+      }
+      
+      // Make the request
+      final response = await _dio.post('/auth/login/', data: requestData);
+      
+      print('=== LOGIN RESPONSE ===');
+      print('Status Code: ${response.statusCode}');
+      print('Response Headers: ${response.headers}');
+      print('Response Data: ${response.data}');
+      print('======================');
       
       // Check if response data contains required fields
       if (response.data == null) {
-        throw Exception('Invalid response from server');
+        throw Exception('Invalid response from server: null response');
+      }
+      
+      // Handle error responses
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        final errorMsg = response.data is Map 
+            ? (response.data as Map)['detail'] ?? (response.data as Map)['error'] ?? response.data.toString()
+            : response.data.toString();
+        throw Exception('Login failed: $errorMsg');
       }
       
       final data = response.data as Map<String, dynamic>;
       if (!data.containsKey('access_token') || !data.containsKey('refresh_token') || !data.containsKey('user')) {
-        throw Exception('Invalid response format from server');
+        print('❌ Missing required fields in response');
+        print('Available keys: ${data.keys.toList()}');
+        throw Exception('Invalid response format from server. Missing required fields.');
       }
       
       // Parse user data and log it for debugging
@@ -356,8 +408,29 @@ class ApiService {
       
       // Tokens are automatically saved by the response interceptor
       return authResponse;
+    } on DioException catch (e) {
+      print('=== LOGIN DIO ERROR ===');
+      print('Error Type: ${e.type}');
+      print('Error Message: ${e.message}');
+      print('Response: ${e.response?.data}');
+      print('Status Code: ${e.response?.statusCode}');
+      print('Request Options: ${e.requestOptions.uri}');
+      print('=======================');
+      
+      if (e.response != null) {
+        final errorData = e.response!.data;
+        final errorMsg = errorData is Map 
+            ? (errorData['detail'] ?? errorData['error'] ?? errorData.toString())
+            : errorData.toString();
+        throw Exception('Login failed: $errorMsg');
+      } else {
+        throw Exception('Login failed: ${e.message ?? 'Network error'}');
+      }
     } catch (e) {
-      print('Login request failed: $e');
+      print('=== LOGIN GENERAL ERROR ===');
+      print('Error: $e');
+      print('Error Type: ${e.runtimeType}');
+      print('===========================');
       rethrow;
     }
   }
