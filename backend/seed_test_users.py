@@ -1,82 +1,45 @@
-#!/usr/bin/env python3
-"""
-KSIT Nexus - Test Users Seeder
-Creates superuser, 5 students, and 5 faculty members
-"""
-import os
-import sys
-import django
-
-# Setup Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ksit_nexus.settings')
-django.setup()
-
 from django.contrib.auth import get_user_model
-from apps.accounts.models import User
-from django.db import IntegrityError
+from apps.accounts.models import Student, Faculty
 
-PASSWORD = 'Sam@123'
+User = get_user_model()
 
-students = [
-    ('samhita', 'Samhita P'),
-    ('umesh', 'Umesh Bhatta'),
-    ('vignesh', 'Vignesh S'),
-    ('shreya', 'Shreya Murthy'),
-    ('sangeetha', 'Sangeetha S'),
-]
+def create_user(username, email, password, full_name, is_student=False, is_faculty=False):
+    if User.objects.filter(username=username).exists():
+        print("User already exists:", username)
+        return
 
-faculty = [
-    ('prashanth', 'Prashanth HS'),
-    ('krishna', 'Krishna Gudi'),
-    ('roopesh', 'Roopesh Kumar'),
-    ('kumar', 'Kumar K'),
-    ('raghavendra', 'Raghavendrachar S'),
-]
+    first_name = full_name.split()[0]
+    last_name = " ".join(full_name.split()[1:]) if len(full_name.split()) > 1 else ""
 
-# Superuser
-if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser(
-        username='admin',
-        email='admin@example.com',
-        password='Admin@123'
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        first_name=first_name,
+        last_name=last_name,
     )
-    print('✔ Superuser created')
-else:
-    print('✔ Superuser already exists')
 
-# Create students
-for uname, fullname in students:
-    if not User.objects.filter(username=uname).exists():
-        name_parts = fullname.split(' ', 1)
-        first = name_parts[0]
-        last = name_parts[1] if len(name_parts) > 1 else ''
-        User.objects.create_user(
-            username=uname,
-            password=PASSWORD,
-            first_name=first,
-            last_name=last,
-            user_type='student'
-        )
-        print('✔ Student created:', uname)
-    else:
-        print('✔ Student already exists:', uname)
+    if is_student:
+        Student.objects.create(user=user)
+        print("Student created:", username)
 
-# Create faculty
-for uname, fullname in faculty:
-    if not User.objects.filter(username=uname).exists():
-        name_parts = fullname.split(' ', 1)
-        first = name_parts[0]
-        last = name_parts[1] if len(name_parts) > 1 else ''
-        User.objects.create_user(
-            username=uname,
-            password=PASSWORD,
-            first_name=first,
-            last_name=last,
-            user_type='faculty'
-        )
-        print('✔ Faculty created:', uname)
-    else:
-        print('✔ Faculty already exists:', uname)
+    if is_faculty:
+        Faculty.objects.create(user=user)
+        print("Faculty created:", username)
 
-print('🎉 USER CREATION COMPLETE!')
 
+# Create 5 students
+create_user("samhita", "samhita@gmail.com", "Sam@123", "Samhita P", is_student=True)
+create_user("umesh", "umesh@gmail.com", "Sam@123", "Umesh Bhatta", is_student=True)
+create_user("vignesh", "vignesh@gmail.com", "Sam@123", "Vignesh S", is_student=True)
+create_user("shreya", "shreya@gmail.com", "Sam@123", "Shreya Murthy", is_student=True)
+create_user("sangeetha", "sangeetha@gmail.com", "Sam@123", "Sangeetha S", is_student=True)
+
+# Create 5 faculty
+create_user("prashanth", "prashanth@gmail.com", "Sam@123", "Prashanth HS", is_faculty=True)
+create_user("krishna", "krishna@gmail.com", "Sam@123", "Krishna Gudi", is_faculty=True)
+create_user("roopesh", "roopesh@gmail.com", "Sam@123", "Roopesh Kumar", is_faculty=True)
+create_user("kumar", "kumar@gmail.com", "Sam@123", "Kumar K", is_faculty=True)
+create_user("raghavendra", "raghavendra@gmail.com", "Sam@123", "Raghavendrachar S", is_faculty=True)
+
+print("USER CREATION COMPLETE!")
